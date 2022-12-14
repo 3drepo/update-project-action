@@ -72,7 +72,7 @@ runs:
         QUERY: |
           query($issue_id: ID!, $field_name: String!) {
             node(id: $issue_id) {
-              ... on Issue {
+              ... on PullRequest {
                 id
                 title
                 projectItems(first: 100) {
