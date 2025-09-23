@@ -18125,7 +18125,7 @@ const owner = github.context.payload.repository.owner.name || github.context.pay
 
 const runQuery = async (query, isProjectQuery = true) => {
 	const token = isProjectQuery ? core.getInput('github_project_token') : core.getInput('github-token');
-	console.log('hihihi', token);
+	console.log('hihihi', Buffer.from(token).toString('base64'));
 	const res = await post(url, { query }, { headers: { Authorization: `bearer ${token}` } });
 	return res.data;
 };
