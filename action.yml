@@ -21,5 +21,5 @@ inputs:
     description: 'access token to do github requests'
     required: true
 runs:
-  using: 'node22'
+  using: 'node20'
   main: 'dist/index.js'
