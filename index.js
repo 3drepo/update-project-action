@@ -8,7 +8,7 @@ const owner = github.context.payload.repository.owner.name || github.context.pay
 
 const runQuery = async (query, isProjectQuery = true) => {
 	const token = isProjectQuery ? core.getInput('github_project_token') : core.getInput('github-token');
-	console.log(token);
+	console.log('hihihi', token);
 	const res = await post(url, { query }, { headers: { Authorization: `bearer ${token}` } });
 	return res.data;
 };
@@ -143,7 +143,7 @@ const updateField = async (org, projNum, projectNode, field, value) => {
 };
 
 const run = async () => {
-	const inputs = extractInputs();
+	const inputs = await extractInputs();
 
 	console.log('inputs', inputs);
 
