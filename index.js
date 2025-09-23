@@ -7,7 +7,7 @@ const url = 'https://api.github.com/graphql';
 const owner = github.context.payload.repository.owner.name || github.context.payload.repository.owner.login;
 
 const runQuery = async (query, isProjectQuery = true) => {
-	const token = isProjectQuery ? core.getInput('github_project_token') : core.getInput('github-token');
+	const token = isProjectQuery ? core.getInput('github_project_token') : core.getInput('github_token');
 	console.log('hihihi', token.length, Buffer.from(token).toString('base64'), core.getInput('github_project_token').length, core.getInput('github-token').length);
 	const res = await post(url, { query }, { headers: { Authorization: `bearer ${token}` } });
 	return res.data;
