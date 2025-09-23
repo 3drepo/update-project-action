@@ -14,8 +14,8 @@ inputs:
   value:
     description: The value to set the project field to
     required: true
-  project_node:
-    description: The global ID of the item within the project
+  content_id:
+    description: The global ID of the issue or pull request 
     required: true
   github_token:
     description: 'access token to do github requests'
