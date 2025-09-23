@@ -18123,8 +18123,9 @@ const url = 'https://api.github.com/graphql';
 
 const owner = github.context.payload.repository.owner.name || github.context.payload.repository.owner.login;
 
-const runQuery = async (query) => {
-	const token = core.getInput('github-token');
+const runQuery = async (query, isProjectQuery = true) => {
+	const token = isProjectQuery ? core.getInput('github_project_token') : core.getInput('github-token');
+	console.log('hihihi', token);
 	const res = await post(url, { query }, { headers: { Authorization: `bearer ${token}` } });
 	return res.data;
 };
@@ -18136,9 +18137,9 @@ const getProjectId = async (contentId, projectNum) => {
       title
       projectItems(first: 10) {
         nodes {
-          id                 # <-- Project Item ID (row ID)
+          id            
           project {
-            number           # Project number (so you can match it)           
+            number      
           }
         }
       }`;
@@ -18154,7 +18155,7 @@ const getProjectId = async (contentId, projectNum) => {
 		}
 	  }
 	}`;
-	const { data } = await runQuery(query);
+	const { data } = await runQuery(query, false);
 	return data.node?.projectItems?.nodes?.find(({ project }) => project.number === projectNum)?.id;
 };
 
@@ -18259,7 +18260,7 @@ const updateField = async (org, projNum, projectNode, field, value) => {
 };
 
 const run = async () => {
-	const inputs = extractInputs();
+	const inputs = await extractInputs();
 
 	console.log('inputs', inputs);
 
