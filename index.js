@@ -135,8 +135,7 @@ const updateField = async (org, projNum, projectNode, field, value) => {
 	const { errors } = await runQuery(query);
 
 	if (errors?.length) {
-		console.log(`Update failed: ${errors[0].message}`);
-		console.log('mutation query', query);
+		throw new Error(`Failed to update field ${field.name}: ${errors[0].message}`);
 	}
 };
 
