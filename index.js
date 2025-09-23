@@ -12,11 +12,9 @@ const runQuery = async (query, isProjectQuery = true) => {
 	return res.data;
 };
 
-const getProjectId = async (contentId, projectNum) => {
+const getProjectNode = async (contentId, projectNum) => {
 	const projection = `
-	   id
-      numbers
-      title
+	      
       projectItems(first: 10) {
         nodes {
           id            
@@ -52,7 +50,7 @@ const extractInputs = async () => {
 	const contentId = core.getInput('content_id');
 	if (!contentId) { throw new Error('content_id cannot be empty'); }
 
-	const projectNode = await getProjectId(contentId, projectNum);
+	const projectNode = await getProjectNode(contentId, projectNum);
 
 	const field = core.getInput('field');
 	if (!field) { throw new Error('field cannot be empty'); }
