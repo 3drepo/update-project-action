@@ -18154,7 +18154,9 @@ const getProjectId = async (contentId, projectNum) => {
 		}
 	  }
 	}`;
-	const { data } = await runQuery(query, false);
+	const res = await runQuery(query, false);
+	console.log(res);
+	const { data } = res;
 	return data?.node?.projectItems?.nodes?.find(({ project }) => project.number === projectNum)?.id;
 };
 
