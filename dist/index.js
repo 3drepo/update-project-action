@@ -18153,7 +18153,7 @@ const getProjectNode = async (contentId, projectNum) => {
 	  }
 	}`;
 	const res = await runQuery(query, false);
-	console.log(res);
+	console.log(res?.data?.node?.projectItems?.nodes);
 	const { data } = res;
 	return data?.node?.projectItems?.nodes?.find(({ project }) => project.number === projectNum)?.id;
 };
