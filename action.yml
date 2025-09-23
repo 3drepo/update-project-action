@@ -20,9 +20,7 @@ inputs:
   github_token:
     description: 'access token to do github requests'
     required: true
-  github_project_token:
-    description: 'access token to access github projects'
-    required: true
+
 runs:
   using: 'node20'
   main: 'dist/index.js'
