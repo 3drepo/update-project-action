@@ -18129,14 +18129,45 @@ const runQuery = async (query) => {
 	return res.data;
 };
 
-const extractInputs = () => {
+const getProjectId = async (contentId, projectNum) => {
+	const projection = `
+	   id
+      number
+      title
+      projectItems(first: 10) {
+        nodes {
+          id                 # <-- Project Item ID (row ID)
+          project {
+            number           # Project number (so you can match it)           
+          }
+        }
+      }`;
+
+	const query = `{
+	 node(id: "${contentId}") {
+		__typename
+		... on Issue {
+		  ${projection}
+		}
+		... on PullRequest {
+		  ${projection}
+		}
+	  }
+	}`;
+	const { data } = await runQuery(query);
+	return data.node?.projectItems?.nodes?.find(({ project }) => project.number === projectNum)?.id;
+};
+
+const extractInputs = async () => {
 	const org = core.getInput('organization') || owner;
 
-	const projectNum = core.getInput('project_number');
+	const projectNum = Number(core.getInput('project_number'));
 	if (!projectNum) { throw new Error('project_number cannot be empty'); }
 
-	const projectNode = core.getInput('project_node');
-	if (!projectNode) { throw new Error('project_node cannot be empty'); }
+	const contentId = core.getInput('content_id');
+	if (!contentId) { throw new Error('content_id cannot be empty'); }
+
+	const projectNode = await getProjectId(contentId, projectNum);
 
 	const field = core.getInput('field');
 	if (!field) { throw new Error('field cannot be empty'); }
