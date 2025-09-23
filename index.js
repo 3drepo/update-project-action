@@ -155,5 +155,6 @@ const run = async () => {
 	await updateField(org, projectNum, projectNode, field, inputs.value);
 };
 run().catch((err) => {
+	console.log(err);
 	core.setFailed(err.message);
 });
