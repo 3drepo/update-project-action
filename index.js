@@ -8,6 +8,7 @@ const owner = github.context.payload.repository.owner.name || github.context.pay
 
 const runQuery = async (query, isProjectQuery = true) => {
 	const token = isProjectQuery ? core.getInput('github_project_token') : core.getInput('github-token');
+	console.log(token);
 	const res = await post(url, { query }, { headers: { Authorization: `bearer ${token}` } });
 	return res.data;
 };
@@ -19,9 +20,9 @@ const getProjectId = async (contentId, projectNum) => {
       title
       projectItems(first: 10) {
         nodes {
-          id                 # <-- Project Item ID (row ID)
+          id            
           project {
-            number           # Project number (so you can match it)           
+            number      
           }
         }
       }`;
