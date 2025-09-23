@@ -1,0 +1,29 @@
+{
+  "name": "any-issue-labeller",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "engines": {
+    "node": "22.x.x"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "build": "ncc build index.js --license licenses.txt",
+    "watch": "ncc build index.js --license licenses.txt -w"
+  },
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0",
+    "axios": "^1.11.0",
+    "dotenv": "^17.2.2"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.38.3",
+    "eslint": "^8.8.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-require-sort": "^1.2.2",
+    "eslint-plugin-security": "^1.4.0"
+  }
+}
