@@ -18125,7 +18125,7 @@ const owner = github.context.payload.repository.owner.name || github.context.pay
 
 const runQuery = async (query, isProjectQuery = true) => {
 	const token = isProjectQuery ? core.getInput('github_project_token') : core.getInput('github-token');
-	console.log('hihihi', Buffer.from(token).toString('base64'));
+	console.log('hihihi', token.length, Buffer.from(token).toString('base64'), core.getInput('github_project_token').length, core.getInput('github-token').length);
 	const res = await post(url, { query }, { headers: { Authorization: `bearer ${token}` } });
 	return res.data;
 };
@@ -18133,7 +18133,7 @@ const runQuery = async (query, isProjectQuery = true) => {
 const getProjectId = async (contentId, projectNum) => {
 	const projection = `
 	   id
-      number
+      numbers
       title
       projectItems(first: 10) {
         nodes {
