@@ -8,7 +8,6 @@ const owner = github.context.payload.repository.owner.name || github.context.pay
 
 const runQuery = async (query, isProjectQuery = true) => {
 	const token = isProjectQuery ? core.getInput('github_project_token') : core.getInput('github_token');
-	console.log('hihihi', token.length, Buffer.from(token).toString('base64'), core.getInput('github_project_token').length, core.getInput('github-token').length);
 	const res = await post(url, { query }, { headers: { Authorization: `bearer ${token}` } });
 	return res.data;
 };
@@ -39,7 +38,7 @@ const getProjectId = async (contentId, projectNum) => {
 	  }
 	}`;
 	const { data } = await runQuery(query, false);
-	return data.node?.projectItems?.nodes?.find(({ project }) => project.number === projectNum)?.id;
+	return data?.node?.projectItems?.nodes?.find(({ project }) => project.number === projectNum)?.id;
 };
 
 const extractInputs = async () => {
@@ -133,7 +132,6 @@ const updateField = async (org, projNum, projectNode, field, value) => {
 				clientMutationId
 			}
 		}`;
-	console.log(query);
 	const { errors } = await runQuery(query);
 
 	if (errors?.length) {
