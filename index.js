@@ -6,8 +6,8 @@ const url = 'https://api.github.com/graphql';
 
 const owner = github.context.payload.repository.owner.name || github.context.payload.repository.owner.login;
 
-const runQuery = async (query) => {
-	const token = core.getInput('github-token');
+const runQuery = async (query, isProjectQuery = true) => {
+	const token = isProjectQuery ? core.getInput('github_project_token') : core.getInput('github-token');
 	const res = await post(url, { query }, { headers: { Authorization: `bearer ${token}` } });
 	return res.data;
 };
@@ -37,7 +37,7 @@ const getProjectId = async (contentId, projectNum) => {
 		}
 	  }
 	}`;
-	const { data } = await runQuery(query);
+	const { data } = await runQuery(query, false);
 	return data.node?.projectItems?.nodes?.find(({ project }) => project.number === projectNum)?.id;
 };
 
