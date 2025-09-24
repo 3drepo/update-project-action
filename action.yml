@@ -11,6 +11,10 @@ inputs:
   field:
     description: The field on the project to set the value of
     required: true
+  operation:
+    description: The operation to perform on the project field (read or write , default is write)
+    required: false
+    default: write
   value:
     description: The value to set the project field to
     required: true

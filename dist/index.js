@@ -18173,9 +18173,10 @@ const extractInputs = async () => {
 	if (!field) { throw new Error('field cannot be empty'); }
 
 	const value = core.getInput('value');
-	if (!value) { throw new Error('value cannot be empty'); }
+	const isRead = core.getInput('operation') === 'read';
+	if (!value && !isRead) { throw new Error('value cannot be empty if operation is write'); }
 
-	return { projectNum, projectNode, field, value, org };
+	return { projectNum, projectNode, field, value, org, isRead };
 };
 
 const getFieldObject = async (org, projNum, fieldName) => {
@@ -18256,6 +18257,36 @@ const updateField = async (org, projNum, projectNode, field, value) => {
 	}
 };
 
+const readValue = async (projectNode, field) => {
+	const query = `
+		{
+			node(id: "${projectNode}") {
+				... on ProjectV2Item {
+					${field.name}: fieldValueByName(name: "${field.name}") {
+						... on ProjectV2ItemFieldTextValue {                                                
+							text
+						}
+						... on ProjectV2ItemFieldSingleSelectValue {
+							name
+						}
+						... on ProjectV2ItemFieldNumberValue {
+							number
+						}
+						... on ProjectV2ItemFieldDateValue {
+							date
+						}
+					}
+				}
+			}
+		}`;
+
+	const { data } = await runQuery(query);
+	const node = data?.node;
+	if (!node) { throw new Error(`Cannot find project item: ${projectNode}`); }
+	return node?.[field.name].text ?? node?.[field.name].name
+	?? node?.[field.name].number ?? node?.[field.name].date;
+};
+
 const run = async () => {
 	const inputs = await extractInputs();
 
@@ -18266,7 +18297,13 @@ const run = async () => {
 	const field = await getFieldObject(org, projectNum, inputs.field);
 	if (!field) { throw new Error(`Cannot find field in project: ${inputs.field}`); }
 
-	await updateField(org, projectNum, projectNode, field, inputs.value);
+	if (inputs.isRead) {
+		const value = await readValue(projectNode, field);
+		console.log('value read from field', value);
+		core.setOutput('field_read_value', value);
+	} else {
+		await updateField(org, projectNum, projectNode, field, inputs.value);
+	}
 };
 run().catch((err) => {
 	console.log(err);
